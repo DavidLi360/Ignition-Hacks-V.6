@@ -1,5 +1,15 @@
 let flashcardCount = 0;
 
+async function getSummary(text) {
+    const response = await fetch("http://127.0.0.1:5000/summarize", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: text })
+    });
+    const summaryArray = await response.json();
+    return summaryArray; // Array of concise sentences
+}
+
 function addFlashcard() {
     flashcardCount++;
     const flashcardsDiv = document.getElementById('flashcards');
@@ -47,3 +57,9 @@ function saveFlashcards() {
 
 // Initialize with one flashcard
 addFlashcard();
+
+const text = "Working memory is the short-term system the brain uses to hold and manipulate information temporarily. The spacing effect suggests that information is better recalled if learning sessions are spaced out over time. Chunking improves memory by grouping individual pieces of data into larger, meaningful units (e.g., phone numbers). The serial position effect says we tend to remember the first (primacy) and last (recency) items in a list best.";
+
+getSummary(text).then(summary => {
+    console.log(summary);
+});
