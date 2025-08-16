@@ -182,11 +182,6 @@ def submit_result():
     
     return jsonify({'message': 'Results submitted successfully'})
 
-# Login page
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    # For now, just render the login form
-    return render_template("login.html")
   
 @app.route("/register", methods=["GET", "POST"])
 def register():
