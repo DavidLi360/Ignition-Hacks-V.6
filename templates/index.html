@@ -4,8 +4,52 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ignition Template</title>
+    <link rel="stylesheet" href="static/css/styles.css">
 </head>
 <body>
-    <h1>Welcome to Ignition</h1>
+    <nav>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">Create</a></li>
+        </ul>
+    </nav>
+
+    <div class="toggle-container">
+        <label for="test-toggle">Test Mode:</label>
+        <input type="checkbox" id="test-toggle" name="test-toggle" class="toggle-switch">
+        <span id="test-status">Off</span>
+    </div>
+
+    <script>
+        const toggle = document.getElementById('test-toggle');
+        const status = document.getElementById('test-status');
+        toggle.addEventListener('change', function() {
+            status.textContent = this.checked ? 'On' : 'Off';
+        });
+
+        toggle.addEventListener('change', function() {
+            fetch('/toggle', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ status: this.checked })
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+    </script>
+
+    {% for card_set in card_sets %}
+        <div class="card">
+            <h2>{{ card_set.title }}</h2>
+            <p>{{ card_set.description }}</p>
+        </div>
+    {% endfor %}
 </body>
 </html>
