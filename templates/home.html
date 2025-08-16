@@ -1,7 +1,8 @@
 {% extends "layout.html" %}
 
 {% block body %}
-    <h1>Welcome to Flashcards</h1>
+<div class="homepage">
+    <h1>MemoType</h1>
 
     <nav>
         <a href="{{ url_for('home') }}">Home</a>
@@ -15,18 +16,16 @@
         <span id="test-status">Off</span>
     </div>
 
-    <script src="/static/js/index.js"></script>
-
     <h2>Your Flashcard Sets</h2>
-    <ul>
+    <ul class="set-list">
         {% for s in sets %}
-        <li>
+        <li class="set-card">
             <strong>{{ s.title }}</strong> — {{ s.description }}
         </li>
         {% else %}
-        <li>No flashcard sets yet. Create one!</li>
+        <li class="set-card">No flashcard sets yet. Create one!</li>
         {% endfor %}
     </ul>
-
-    
+</div>
+<script src="/static/js/index.js"></script>
 {% endblock %}

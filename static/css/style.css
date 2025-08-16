@@ -151,6 +151,88 @@ button {
     font-weight: bold;
 }
 
+/* === Homepage Styles (Dark Themed) === */
+.homepage {
+    background-color: #1e1e2f;
+    color: #f1f1f1;
+    min-height: 100vh;
+    padding-bottom: 2rem;
+}
+
+/* header */
+.homepage h1 {
+    text-align: center;
+    padding: 1rem;
+    background: #2b2b3e;
+    color: #ffffff;
+    margin: 0;
+    font-size: 3rem;
+    border-bottom: 1px solid #3a3a50;
+}
+
+/* nav bar */
+.homepage nav {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    background: #3c3c50;
+    padding: 0.75rem;
+    border-bottom: 1px solid #3a3a50;
+    font-size: 1.2rem;
+}
+
+.homepage nav a {
+    color: #cfd6f6;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.2s;
+}
+
+.homepage nav a:hover {
+    color: #4cafee; /* accent blue */
+}
+
+/* section titles */
+.homepage h2 {
+    text-align: center;
+    margin-top: 2rem;
+    color: #cfd6f6;
+}
+
+/* flashcard set list */
+.homepage .set-list {
+    list-style: none;
+    padding: 0;
+    max-width: 800px;
+    margin: 2rem auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.homepage .set-card {
+    background: #2b2b3e;
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.4);
+    transition: transform 0.2s, box-shadow 0.2s;
+    color: #f1f1f1;
+    border: 1px solid #3a3a50;
+}
+
+.homepage .set-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.6);
+}
+
+.homepage .set-card strong {
+    display: block;
+    font-size: 1.2rem;
+    color: #4cafee; /* accent */
+    margin-bottom: 0.5rem;
+}
+
+
 /* body {
     font-family: sans-serif;
     font-size: 2em;

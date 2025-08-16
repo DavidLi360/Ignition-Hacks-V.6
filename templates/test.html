@@ -1,15 +1,38 @@
 {% extends "layout.html" %}
-
 {% block body %}
-    <div id="flashcard-container">
-        <h1>Flashcard TEST! 😡</h1>
-        <div id="question"></div>
-        <div id="input-container">
-            <input type="text" id="answer-input" autofocus>
-        </div>
-        <div id="feedback"></div>
-        <button id="next-button">Next Card</button>
-    
-        <script src="/static/js/test.js"></script>
+  <div id="flashcard-container" style="position:relative;">
+    <h1>Flashcard TEST! 📝</h1>
+
+    <div id="question" style="margin-top:8px;"></div>
+
+    <!-- Explicit styles so text is visible and not covered -->
+    <div id="input-container" style="margin-top:12px;">
+      <textarea id="answer-input"
+        rows="4"
+        placeholder="Type your answer here..."
+        autofocus
+        style="
+          width:100%;
+          max-width:700px;
+          background:#ffffff;
+          color:#111111;
+          caret-color:#111111;
+          border:1px solid #c9c9c9;
+          border-radius:8px;
+          padding:10px 12px;
+          font-size:16px;
+          line-height:1.4;
+          outline:none;
+          z-index:10;
+          position:relative;
+          opacity:1;
+        "
+      ></textarea>
     </div>
+
+    <div id="feedback" style="margin-top:10px; font-weight:600;"></div>
+    <button id="next-button" style="margin-top:10px;">Next Card</button>
+
+    <script src="/static/js/test.js"></script>
+  </div>
 {% endblock %}
