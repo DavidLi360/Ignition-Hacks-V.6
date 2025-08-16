@@ -46,14 +46,17 @@ document.addEventListener('DOMContentLoaded', () => {
         for (let i = 0; i < answer.length; i++) {
             const char = answer[i];
             const typedChar = typedCharacters[i];
+
+            // Preserve spaces visually
+            const displayChar = char === " " ? "&nbsp;" : char;
     
             if (typedChar === undefined) {
                 console.log('no')
             } else if (typedChar === char) {
-                feedbackHTML += `<span class="correct">${char}</span>`;
+                feedbackHTML += `<span class="correct">${displayChar}</span>`;
                 correctCount++;
             } else {
-                feedbackHTML += `<span class="incorrect">${char}</span>`;
+                feedbackHTML += `<span class="incorrect">${displayChar}</span>`;
             }
         }
 
