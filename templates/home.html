@@ -20,12 +20,14 @@
     <ul class="set-list">
         {% for s in sets %}
         <li class="set-card">
+            <button id="{{ s.id }}">
             <strong>{{ s.title }}</strong> — {{ s.description }}
+            </button>
         </li>
         {% else %}
         <li class="set-card">No flashcard sets yet. Create one!</li>
         {% endfor %}
     </ul>
 </div>
-<script src="/static/js/index.js"></script>
+<script src="/static/js/home.js"></script>
 {% endblock %}

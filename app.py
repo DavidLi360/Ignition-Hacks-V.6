@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for, session, g, flash, jsonify 
+from flask import Flask, render_template, request, redirect, url_for, session, g, flash, jsonify
 from module.summarizer import summarize_text, docx_to_sentences
 import sqlite3
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 import os
 from sentence_transformers import SentenceTransformer, util
+import json
 
 # Load model once (fast reuse)
 model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
@@ -44,12 +45,21 @@ def init_db():
         )"""
     )
     db.execute(
-        """CREATE TABLE IF NOT EXISTS flashcards (
+        """CREATE TABLE IF NOT EXISTS flashcard_sets (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             user_id INTEGER NOT NULL,
             title TEXT NOT NULL,
             description TEXT,
             FOREIGN KEY (user_id) REFERENCES users (id)
+        )"""
+    )
+    db.execute(
+        """CREATE TABLE IF NOT EXISTS flashcards (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            set_id INTEGER NOT NULL,
+            question TEXT NOT NULL,
+            answer TEXT NOT NULL,
+            FOREIGN KEY (set_id) REFERENCES flashcard_sets (id)
         )"""
     )
     db.commit()
@@ -72,8 +82,9 @@ def home():
     if "user_id" not in session:
         return redirect(url_for("login"))
     db = get_db()
-    sets = db.execute("SELECT * FROM flashcards WHERE user_id = ?", (session["user_id"],)).fetchall()
-    return render_template("home.html", sets=sets)
+    sets = db.execute("SELECT * FROM flashcard_sets WHERE user_id = ?", (session["user_id"],)).fetchall()
+
+    return render_template("home.html", sets=sets, is_test_mode=is_test_mode)
 
 
 # ---------- Similarity Check ----------
@@ -121,6 +132,8 @@ def handle_toggle():
     if not request.json:
         return jsonify({'error': 'Invalid request'}), 400
     status = request.json.get('status')
+    print(status)
+    print('hello????')
     is_test_mode = bool(status)
     return jsonify({'message': 'Status received successfully', 'current_status': status})
 
@@ -133,24 +146,53 @@ def create():
         if title and user_id:
             db = get_db()
             db.execute(
-                "INSERT INTO flashcards (user_id, title, description) VALUES (?, ?, ?)",
+                "INSERT INTO flashcard_sets (user_id, title, description) VALUES (?, ?, ?)",
                 (user_id, title, description)
             )
             db.commit()
             flash("Flashcard set created!", "success")
+        
+        flashcards_json = request.form.get('flashcards_data')
+        if flashcards_json:
+            flashcards = json.loads(flashcards_json)
+        else:
+            flashcards = []
+
+        # Get the set_id of the newly created flashcard set
+        set_id = db.execute(
+            "SELECT id FROM flashcard_sets WHERE user_id = ? AND title = ? ORDER BY id DESC LIMIT 1",
+            (user_id, title)
+        ).fetchone()["id"]
+
+
+        for card in flashcards:
+            db.execute(
+            "INSERT INTO flashcards (set_id, question, answer) VALUES (?, ?, ?)",
+            (set_id, card['term'], card['definition'])
+            )
+
+        db.commit()
         return redirect(url_for("home"))
     return render_template("create.html")
 
 @app.route("/learn/<set_id>")
 def learn(set_id):
-    flashcards = default_flashcards()
+    # grab flashcards from database
+    db = get_db()
+    flashcards = db.execute("SELECT * FROM flashcards WHERE id = ?", (set_id,)).fetchall()
+    flashcards = [dict(flashcard) for flashcard in flashcards]
+    print(flashcards)
     session['flashcards'] = flashcards
     session['current_index'] = 0
     return render_template("learn.html", flashcards=flashcards)
 
 @app.route("/test/<set_id>")
 def test(set_id):
-    session['flashcards'] = default_flashcards()
+
+    db = get_db()
+    flashcards = db.execute("SELECT * FROM flashcards WHERE id = ?", (set_id,)).fetchall()[0]
+
+    session['flashcards'] = dict(flashcards)
     session['current_index'] = 0
     return render_template("test.html")
 
@@ -169,7 +211,9 @@ def get_next_card():
     if 'current_index' not in session:
         session['current_index'] = 0
 
+    print('HI')
     cards = session['flashcards']
+    print(cards)
     idx = session['current_index']
 
     if idx >= len(cards):

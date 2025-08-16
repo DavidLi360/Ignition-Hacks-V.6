@@ -35,6 +35,12 @@ function removeFlashcard(id) {
     }
 }
 
+const form = document.getElementById('flashcard-form');
+form.addEventListener('submit', function(event) {
+    event.preventDefault();  // Prevent the default form submission
+    saveFlashcards();
+});
+
 function saveFlashcards() {
     const title = document.getElementById('title').value;
     const description = document.getElementById('description').value;
@@ -53,7 +59,16 @@ function saveFlashcards() {
         flashcards
     });
 
+    const hiddenInput = document.createElement('input');
+    hiddenInput.type = 'hidden';
+    hiddenInput.name = 'flashcards_data'; // Must match the name Flask expects
+    hiddenInput.value = JSON.stringify(flashcards);
+    form.appendChild(hiddenInput);
     alert('Flashcards saved! Check the console for output.');
+
+    // Save the flashcards by submitting the form
+    form.submit();
+
 }
 
 // Initialize with one flashcard
