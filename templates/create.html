@@ -2,20 +2,28 @@
 
 {% block body %}
 <div class="container">
-    <h1>Create a New Flashcard Set Manually</h1>
-    <input type="text" id="title" placeholder="Title">
-    <textarea id="description" placeholder="Add a description..."></textarea>
+    <h1>Create a New Flashcard Set</h1>
 
-    <div id="flashcards">
-        <!-- Flashcards will appear here -->
-    </div>
+    <!-- Form sends data to /create -->
+    <form method="POST" action="{{ url_for('create') }}">
+        <input type="text" name="title" id="title" placeholder="Title" required>
+        <textarea name="description" id="description" placeholder="Add a description..."></textarea>
 
-    <div class="buttons">
-        <button class="add-btn" onclick="addFlashcard()">+ Add Flashcard</button>
-        <input type="file" id="fileChooser" placeholder="example.docx"
-            accept=".docx, application/vnd.openxmlformats-officedocument.wordprocessingml.document">
-        <button class="save-btn" onclick="saveFlashcards()">Save All</button>
-    </div>
+        <div id="flashcards">
+            <!-- can extend this with individual flashcards -->
+        </div>
+
+        <div class="buttons">
+            <!-- Add flashcard button possibly -->
+            <button type="button" class="add-btn" onclick="addFlashcard()">+ Add Flashcard</button>
+
+            <!-- File upload (optional, not tied to DB yet) -->
+            <input type="file" id="fileChooser" accept=".docx, application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+
+            <!-- Submit form -->
+            <button type="submit" class="save-btn">Save All</button>
+        </div>
+    </form>
 </div>
 
 <script src="{{ url_for('static', filename='js/create.js') }}"></script>
