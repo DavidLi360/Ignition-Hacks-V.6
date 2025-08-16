@@ -10,12 +10,13 @@ body {
     display: flex;
     flex-direction: column;
     width: 100%;
+    align-items: center; /* Center children horizontally */
 }
-
 .container {
     max-width: 800px;
     margin: 40px auto;
     padding: 20px;
+    display: block; /* Ensure block display for margin auto to work */
 }
 
 h1 {
@@ -149,6 +150,7 @@ button {
     min-width: 30px;
     font-weight: bold;
 }
+
 /* === Homepage Styles (Dark Themed) === */
 .homepage {
     background-color: #1e1e2f;
@@ -228,4 +230,67 @@ button {
     font-size: 1.2rem;
     color: #4cafee; /* accent */
     margin-bottom: 0.5rem;
+}
+
+
+/* body {
+    font-family: sans-serif;
+    font-size: 2em;
+    text-align: center;
+    background-color: #2c2c2c;
+    color: #e0e0e0;
+} 
+*/
+/* 
+#text-container {
+    margin-top: 20px;
+    white-space: pre;
+} */
+
+#typed-text {
+    color: #fff;
+    /* White for typed characters */
+}
+
+#remaining-text {
+    color: #888;
+    /* Dim the remaining text */
+
+}
+
+.correct {
+    color: #48c748;
+    /* Bright green for correct characters */
+}
+
+.incorrect {
+    color: #ff5252;
+    background-color: rgba(255, 0, 0, 0.3);
+    /* Bright red for incorrect characters */
+}
+
+#answer-input {
+    opacity: 0;
+    /* Hide the input field */
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: -1;
+    font-size: large;
+}
+#flashcard-container {
+    background-color: #f7f7f7; /* Off-white color, like paper */
+    border-radius: 10px; /* Rounded corners */
+    padding: 40px; /* Spacing inside the card */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); /* Adds a shadow */
+    width: 600px; /* Set a fixed width */
+    margin: 50px auto; /* Centers the card on the page */
+    text-align: left; /* Aligns text to the left */
+    color: #333; /* Dark gray for text */
+    font-family: Arial, sans-serif;
+    position: relative;
+    box-sizing: border-box; /* Ensures padding and border are included in the width */
+    display: block; /* Use block to allow margin auto centering */
+    box-sizing: border-box; /* Ensures padding and border are included in the width */
+    display: flex;
 }

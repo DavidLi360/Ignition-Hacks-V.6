@@ -136,6 +136,58 @@ def create():
         return redirect(url_for("home"))
     return render_template("create.html")
 
+@app.route("/learn/<set_id>")
+def learn(set_id):
+    # TODO: get the flashcards from the database
+    flashcards = [
+        {"question": "What is the capital of France?", "answer": "Paris"},
+        {"question": "What is 2 + 2?", "answer": "4"},
+        {"question": "What is the largest ocean on Earth?", "answer": "Pacific Ocean"},
+        # {"question": "BIG BOY QUESTION", "answer": "Photosynthesis is the process that plants use to make their own food. It happens mainly in the leaves. Plants take in sunlight, carbon dioxide from the air, and water from the soil. Using the energy from sunlight, they turn these into glucose (a kind of sugar) and oxygen. The oxygen is released into the air, and the glucose is used by the plant for energy and growth. This process is important because it gives us the oxygen we breathe and helps keep the planet healthy."}
+    ]
+
+    session['flashcards'] = flashcards
+    session['current_index'] = 0
+
+    return render_template("learn.html", flashcards=flashcards)
+
+@app.route("/test/<set_id>")
+def test(set_id):
+    # TODO: implement the test route
+    return render_template("test.html")
+
+@app.route('/get_next_card', methods=['GET'])
+def get_next_card():
+    # Check if we're out of cards
+    if session['current_index'] >= len(session['flashcards']):
+        return jsonify({'question': None, 'answer': None, 'quiz_over': True})
+    
+    # Get the current card and increment the index
+    current_card = session['flashcards'][session['current_index']]
+    session['current_index'] += 1
+    
+    return jsonify({
+        'question': current_card['question'],
+        'answer': current_card['answer']
+    })
+
+@app.route('/submit_result', methods=['POST'])
+def submit_result():
+    data = request.get_json()
+    accuracy = data.get('accuracy')
+    wpm = data.get('wpm')
+    
+    # Here you can save the results to a database or a file
+    print(f"Quiz finished! Accuracy: {accuracy}%, WPM: {wpm}")
+    
+    return jsonify({'message': 'Results submitted successfully'})
+
+# Login page
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    # For now, just render the login form
+    return render_template("login.html")
+  
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
