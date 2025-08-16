@@ -1,0 +1,16 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <div id="flashcard-container">
+        <h1>Flashcard Learn</h1>
+        <div id="question"></div>
+        <div id="input-container">
+            <span id="typed-text"></span><span id="remaining-text"></span>
+        </div>
+        <input type="text" id="answer-input" autofocus>
+        <div id="feedback"></div>
+        <button id="next-button">Next Card</button>
+    
+        <script src="/static/js/learn.js"></script>
+    </div>
+{% endblock %}
