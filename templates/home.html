@@ -1,0 +1,32 @@
+{% extends "layout.html" %}
+
+{% block body %}
+    <h1>Welcome to Flashcards</h1>
+
+    <nav>
+        <a href="{{ url_for('home') }}">Home</a>
+        <a href="{{ url_for('create') }}">+ Create Flashcards</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </nav>
+    
+    <div class="toggle-container">
+        <label for="test-toggle">Test Mode:</label>
+        <input type="checkbox" id="test-toggle" name="test-toggle" class="toggle-switch">
+        <span id="test-status">Off</span>
+    </div>
+
+    <script src="/static/js/index.js"></script>
+
+    <h2>Your Flashcard Sets</h2>
+    <ul>
+        {% for s in sets %}
+        <li>
+            <strong>{{ s.title }}</strong> — {{ s.description }}
+        </li>
+        {% else %}
+        <li>No flashcard sets yet. Create one!</li>
+        {% endfor %}
+    </ul>
+
+    
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends "layout.html" %}
+
+{% block body %}
+<div class="container">
+    <h1>Create a New Flashcard Set Manually</h1>
+    <input type="text" id="title" placeholder="Title">
+    <textarea id="description" placeholder="Add a description..."></textarea>
+
+    <div id="flashcards">
+        <!-- Flashcards will appear here -->
+    </div>
+
+    <div class="buttons">
+        <button class="add-btn" onclick="addFlashcard()">+ Add Flashcard</button>
+        <input type="file" id="fileChooser" placeholder="example.docx"
+            accept=".docx, application/vnd.openxmlformats-officedocument.wordprocessingml.document">
+        <button class="save-btn" onclick="saveFlashcards()">Save All</button>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/create.js') }}"></script>
+{% endblock %}
