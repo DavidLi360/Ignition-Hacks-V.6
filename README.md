@@ -7,8 +7,6 @@ Learn Mode: Type with the answer visible to learn
 
 Test Mode: Type from memory, see your words per minute and the similarity between your answer and the correct answer
 
-Spaced repetition: Schedules reviews using both accuracy and typing speed to push toward automatic recall. 
-
 Content: Create custom decks or use built-in sets (psychology, science, economics).
 
 Tech stack: Python, Flask, JavaScript, SQLite
