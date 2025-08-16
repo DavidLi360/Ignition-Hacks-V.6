@@ -7,7 +7,7 @@ body {
 }
 
 #flashcards {
-    display:flex;
+    display: flex;
     flex-direction: column;
     width: 100%;
 }
@@ -23,7 +23,8 @@ h1 {
     margin-bottom: 10px;
 }
 
-input[type="text"], textarea {
+input[type="text"],
+textarea {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
@@ -49,7 +50,7 @@ textarea {
     background-color: #3a3a50;
     color: #fff;
     margin-bottom: 10px;
-    width: 97.3%; 
+    width: 97.3%;
 }
 
 .buttons {
@@ -95,7 +96,7 @@ button {
     font-size: 16px;
     background-color: #8694fe;
     color: #fff;
-  }
+}
 
 .remove-btn {
     background-color: #ff3b30;
@@ -103,4 +104,48 @@ button {
     float: right;
     /* margin-top: 60px;
     margin-bottom: 60px; */
+}
+
+.toggle-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+    margin: 1em 0;
+}
+
+.toggle-switch {
+    width: 40px;
+    height: 20px;
+    appearance: none;
+    background: #ccc;
+    outline: none;
+    border-radius: 20px;
+    position: relative;
+    transition: background 0.3s;
+    cursor: pointer;
+}
+
+.toggle-switch:checked {
+    background: #4caf50;
+}
+
+.toggle-switch::before {
+    content: '';
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    width: 16px;
+    height: 16px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.3s;
+}
+
+.toggle-switch:checked::before {
+    transform: translateX(20px);
+}
+
+#test-status {
+    min-width: 30px;
+    font-weight: bold;
 }
