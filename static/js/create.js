@@ -64,7 +64,7 @@ function saveFlashcards() {
     hiddenInput.name = 'flashcards_data'; // Must match the name Flask expects
     hiddenInput.value = JSON.stringify(flashcards);
     form.appendChild(hiddenInput);
-    alert('Flashcards saved! Check the console for output.');
+    // alert('Flashcards saved! Check the console for output.');
 
     // Save the flashcards by submitting the form
     form.submit();

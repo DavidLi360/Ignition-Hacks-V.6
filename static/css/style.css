@@ -383,3 +383,29 @@ button {
     background-color: #3a9ad9;
     transform: scale(1.05);
 }
+
+/*
+make text wrap and fix space issue
+*/
+#input-container {
+    max-width: 600px;             /* set your desired width */
+    margin: 1rem auto;
+    padding: 0.5rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: #1e1e2f;
+    color: #fff;
+    font-size: 25px;
+
+    white-space: pre-wrap;        /* preserve spaces, allow wrapping */
+    word-break: break-word;       /* break long words */
+    overflow-wrap: break-word;    /* modern equivalent */
+    overflow-x: hidden;           /* hide any accidental overflow */
+    display: block;
+}
+
+#typed-text,
+#remaining-text {
+    display: inline;              /* keep them inline */
+    white-space: pre-wrap;        /* ensure they wrap individually */
+}
