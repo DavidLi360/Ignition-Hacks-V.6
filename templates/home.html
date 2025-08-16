@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Home</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+</head>
+<body>
+  <h1>Welcome to Flashcards</h1>
+
+  <nav>
+    <a href="{{ url_for('home') }}">Home</a>
+    <a href="{{ url_for('create') }}">+ Create Flashcards</a>
+    <a href="{{ url_for('logout') }}">Logout</a>
+  </nav>
+
+  <h2>Your Flashcard Sets</h2>
+  <ul>
+    {% for s in sets %}
+      <li>
+        <strong>{{ s.title }}</strong> — {{ s.description }}
+      </li>
+    {% else %}
+      <li>No flashcard sets yet. Create one!</li>
+    {% endfor %}
+  </ul>
+</body>
+</html>
