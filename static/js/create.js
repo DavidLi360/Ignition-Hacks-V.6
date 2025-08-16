@@ -80,4 +80,21 @@ document.getElementById("fileChooser").addEventListener("change", async function
 
     const summary = await response.json();
     console.log(summary); // Array of summarized sentences
+
+    // Autofill summarized sentences
+    summary.forEach(sentence => {
+        const flashcardsDiv = document.getElementById('flashcards');
+        const cardDiv = document.createElement('div');
+        cardDiv.className = 'flashcard';
+        cardDiv.id = 'flashcard-' + flashcardCount;
+
+        cardDiv.innerHTML = `
+            <input type="text" placeholder="Enter term" class="term">
+            <input type="text" placeholder="Enter definition" class="definition" value="${sentence}">
+            <button class="remove-btn" onclick="removeFlashcard('flashcard-${flashcardCount}')">Remove</button>
+        `;
+        
+        flashcardsDiv.appendChild(cardDiv);
+        flashcardCount++;
+    });
 });

@@ -66,8 +66,6 @@ def home():
     sets = db.execute("SELECT * FROM flashcards WHERE user_id = ?", (session["user_id"],)).fetchall()
     return render_template("home.html", sets=sets)
 
-
-
 @app.route("/summarize", methods=["POST"])
 def summarize():
     try:
@@ -182,12 +180,6 @@ def submit_result():
     
     return jsonify({'message': 'Results submitted successfully'})
 
-# Login page
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    # For now, just render the login form
-    return render_template("login.html")
-  
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":

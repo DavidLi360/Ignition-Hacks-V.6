@@ -32,4 +32,5 @@ class Card:
     
     def get_state(self):
         days_since_last_review = (datetime.datetime.now() - self.last_review_time).days if self.last_review_time else 0
+        print(type(days_since_last_review))
         return np.array([self.learn_state / 3, days_since_last_review / 90, self.wpm / self.max_wpm if self.max_wpm > 0 else 0])
