@@ -6,7 +6,11 @@ from werkzeug.utils import secure_filename
 import os
 from sentence_transformers import SentenceTransformer, util
 import json
+import tensorflow as tf
+import numpy as np
 
+
+SR_model = tf.keras.models.load_model('spaced_repetition_model.keras')
 # Load model once (fast reuse)
 model = SentenceTransformer("sentence-transformers/all-MiniLM-L6-v2")
 
@@ -211,7 +215,6 @@ def get_next_card():
     if 'current_index' not in session:
         session['current_index'] = 0
 
-    print('HI')
     cards = session['flashcards']
     print(cards)
     idx = session['current_index']
@@ -228,9 +231,28 @@ def get_next_card():
 def submit_result():
     data = request.get_json()
     wpm = data.get('wpm')
+    is_correct = data.get('is_correct')
     similarity = data.get('similarity')
+
+    # If we had more time, these would not be hardcoded, and would be stored in the database
+    learn_state = 1
+    normalized_wpm = wpm / 100
+    if not is_correct: normalized_wpm = 0
+    days_since_last_review = 7 
+
+    state = np.array([learn_state, normalized_wpm, days_since_last_review / 90])
+    action = SR_model.predict(state)[0]
+    time_til_next_review = [
+            600,      # 10 minutes
+            86400,    # 1 day
+            259200,   # 3 days
+            604800,   # 1 week
+            2592000,  # 1 month
+            7776000,  # 3 months
+    ][action]
+
     print(f"Quiz finished! WPM: {wpm}, Avg Similarity: {similarity}")
-    return jsonify({'message': 'Results submitted successfully'})
+    return jsonify({'message': 'Results submitted successfully', 'time_til_next_review': time_til_next_review})
 
 
 # ---------- Auth Routes ----------
