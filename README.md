@@ -11,4 +11,4 @@ Spaced repetition: Schedules reviews using both accuracy and typing speed to pus
 
 Content: Create custom decks or use built-in sets (psychology, science, economics).
 
-Tech stack: Python, Flask, SQLite
+Tech stack: Python, Flask, JavaScript, SQLite
