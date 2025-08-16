@@ -247,50 +247,139 @@ button {
     white-space: pre;
 } */
 
-#typed-text {
+/* Container for flashcard learning */
+#flashcard-container {
+    background-color: #2b2b3e; /* Dark card background like Quizlet */
+    border-radius: 12px;
+    padding: 40px;
+    width: 600px;
+    max-width: 90%;
+    margin: 50px auto;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
     color: #fff;
-    /* White for typed characters */
+    font-family: 'Arial', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+/* Title */
+#flashcard-container h1 {
+    font-size: 2rem;
+    margin-bottom: 30px;
+    color: #4cafee; /* Accent color */
+    text-align: center;
+}
+
+/* Question */
+#question {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-bottom: 20px;
+    line-height: 1.4;
+}
+
+/* Typing container like Monkeytype */
+#input-container {
+    background-color: #1e1e2f;
+    width: 100%;
+    min-height: 60px;
+    padding: 15px 20px;
+    border-radius: 8px;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    box-sizing: border-box;
+}
+
+/* Typed vs remaining text */
+#typed-text {
+    color: #48c748; /* Green for correct typed characters */
+}
+
+.incorrect {
+    color: #ff5252; /* Red for incorrect */
+    background-color: rgba(255, 0, 0, 0.2);
+    border-radius: 3px;
 }
 
 #remaining-text {
     color: #888;
-    /* Dim the remaining text */
-
 }
 
-.correct {
-    color: #48c748;
-    /* Bright green for correct characters */
-}
-
-.incorrect {
-    color: #ff5252;
-    background-color: rgba(255, 0, 0, 0.3);
-    /* Bright red for incorrect characters */
-}
-
+/* Hidden input to capture typing */
 #answer-input {
     opacity: 0;
-    /* Hide the input field */
     position: absolute;
     top: 0;
     left: 0;
     z-index: -1;
-    font-size: large;
 }
-#flashcard-container {
-    background-color: #f7f7f7; /* Off-white color, like paper */
-    border-radius: 10px; /* Rounded corners */
-    padding: 40px; /* Spacing inside the card */
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19); /* Adds a shadow */
-    width: 600px; /* Set a fixed width */
-    margin: 50px auto; /* Centers the card on the page */
-    text-align: left; /* Aligns text to the left */
-    color: #333; /* Dark gray for text */
-    font-family: Arial, sans-serif;
-    position: relative;
-    box-sizing: border-box; /* Ensures padding and border are included in the width */
-    display: block; /* Use block to allow margin auto centering */
-    box-sizing: border-box; /* Ensures padding and border are included in the width */
-    display: flex;
+
+/* Feedback messages */
+#feedback {
+    margin-top: 15px;
+    font-size: 1.1rem;
+    min-height: 24px;
+    text-align: center;
+}
+
+/* Next button */
+#next-button {
+    margin-top: 25px;
+    padding: 12px 25px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    background-color: #4cafee;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: transform 0.2s, background-color 0.2s;
+}
+
+#next-button:hover {
+    background-color: #3a9ad9;
+    transform: scale(1.05);
+}
+
+/* Make it responsive for small screens */
+@media screen and (max-width: 650px) {
+    #flashcard-container {
+        padding: 30px 20px;
+    }
+    
+    #question {
+        font-size: 1.2rem;
+    }
+    
+    #input-container {
+        font-size: 1rem;
+    }
+    
+    #next-button {
+        width: 100%;
+        font-size: 1rem;
+    }
+}
+
+/* Home button */
+
+#home-button {
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    padding: 8px 12px;
+    background-color: #4cafee;
+    color: #fff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 6px;
+    transition: background-color 0.2s, transform 0.2s;
+}
+
+#home-button:hover {
+    background-color: #3a9ad9;
+    transform: scale(1.05);
 }
