@@ -1,7 +1,7 @@
 const toggle = document.getElementById('test-toggle');
-const isToggled = document.getElementById('test-is-toggled');
+const testStatus = document.getElementById('test-status');
 toggle.addEventListener('change', function () {
-    isToggled.textContent = this.checked ? 'On' : 'Off';
+    testStatus.textContent = this.checked ? 'On' : 'Off';
 });
 
 toggle.addEventListener('change', function () {
@@ -10,7 +10,7 @@ toggle.addEventListener('change', function () {
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ isToggled: this.checked })
+        body: JSON.stringify({ status: this.checked })
     })
         .then(response => response.json())
         .then(data => {

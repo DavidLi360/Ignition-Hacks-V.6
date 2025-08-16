@@ -3,23 +3,22 @@ from flask import Flask, render_template, request, jsonify, redirect, url_for
 
 app = Flask(__name__)
 
-con = sqlite3.connect("tutorial.db")
-cur = con.cursor()
-cur.execute("CREATE TABLE movie(title, year, score)")
+# con = sqlite3.connect("BOOM.db")
+# cur = con.cursor()
+# cur.execute("CREATE TABLE flashcard_set(title, description)")
 
 
 is_test_mode = False
 
-@app.route('/')
+# Home page is the landing page
+@app.route("/")
 def home():
-    card_sets = [
-        {"title": "Biology", "description": "Description 1"},
-        {"title": "Psychology", "description": "Description 2"},
-        {"title": "Economics", "description": "Description 3"}
+    # Fake sets for now (no DB)
+    sets = [
+        {"title": "Example Set 1", "description": "This is a sample set"},
+        {"title": "Example Set 2", "description": "Another sample set"}
     ]
-
-    # TODO: use SQLite to store and retrieve card sets
-    return render_template('index.html', card_sets=card_sets)
+    return render_template("home.html", sets=sets)
 
 
 @app.route('/toggle', methods=['POST'])
@@ -45,20 +44,11 @@ def handle_toggle():
     # Send a response back to the client
     return jsonify({'message': 'Status received successfully', 'current_status': status})
 
-# Home page is the landing page
-# @app.route("/")
-# def home():
-#     # Fake sets for now (no DB)
-#     sets = [
-#         {"title": "Example Set 1", "description": "This is a sample set"},
-#         {"title": "Example Set 2", "description": "Another sample set"}
-#     ]
-#     return render_template("home.html", sets=sets)
 
 # Create flashcards page
 @app.route("/create")
 def create():
-    return render_template("index.html")
+    return render_template("create.html")
 
 # Login page
 @app.route("/login", methods=["GET", "POST"])
