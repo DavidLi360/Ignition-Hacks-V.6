@@ -66,24 +66,7 @@ def home():
     sets = db.execute("SELECT * FROM flashcards WHERE user_id = ?", (session["user_id"],)).fetchall()
     return render_template("home.html", sets=sets)
 
-@app.route("/create", methods=["GET", "POST"])
-def create():
-    if "user_id" not in session:
-        return redirect(url_for("login"))
 
-    if request.method == "POST":
-        title = request.form["title"]
-        description = request.form["description"]
-
-        db = get_db()
-        db.execute("INSERT INTO flashcards (user_id, title, description) VALUES (?, ?, ?)",
-                   (session["user_id"], title, description))
-        db.commit()
-
-        flash("Flashcard set created!", "success")
-        return redirect(url_for("home"))
-
-    return render_template("index.html")
 
 @app.route("/summarize", methods=["POST"])
 def summarize():
@@ -134,6 +117,24 @@ def handle_toggle():
     # Send a response back to the client
     return jsonify({'message': 'Status received successfully', 'current_status': status})
 
+
+# Create flashcards page
+@app.route("/create", methods=["GET", "POST"])
+def create():
+    if request.method == "POST":
+        title = request.form.get("title")
+        description = request.form.get("description")
+        user_id = session.get("user_id")
+        if title and user_id:
+            db = get_db()
+            db.execute(
+                "INSERT INTO flashcards (user_id, title, description) VALUES (?, ?, ?)",
+                (user_id, title, description)
+            )
+            db.commit()
+            flash("Flashcard set created!", "success")
+        return redirect(url_for("home"))
+    return render_template("create.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
