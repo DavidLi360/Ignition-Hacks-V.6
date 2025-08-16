@@ -102,7 +102,7 @@ def check_answer():
         "is_correct": similarity > 0.7
     })
 
-# ---------- Existing routes ----------
+# ---------- Summarizer ----------
 @app.route("/summarize", methods=["POST"])
 def summarize():
     try:
@@ -132,11 +132,10 @@ def handle_toggle():
     if not request.json:
         return jsonify({'error': 'Invalid request'}), 400
     status = request.json.get('status')
-    print(status)
-    print('hello????')
     is_test_mode = bool(status)
     return jsonify({'message': 'Status received successfully', 'current_status': status})
 
+# ---------- Create ----------
 @app.route("/create", methods=["GET", "POST"])
 def create():
     if request.method == "POST":
@@ -158,12 +157,10 @@ def create():
         else:
             flashcards = []
 
-        # Get the set_id of the newly created flashcard set
         set_id = db.execute(
             "SELECT id FROM flashcard_sets WHERE user_id = ? AND title = ? ORDER BY id DESC LIMIT 1",
             (user_id, title)
         ).fetchone()["id"]
-
 
         for card in flashcards:
             db.execute(
@@ -175,24 +172,25 @@ def create():
         return redirect(url_for("home"))
     return render_template("create.html")
 
+# ---------- Learn ----------
 @app.route("/learn/<set_id>")
 def learn(set_id):
-    # grab flashcards from database
     db = get_db()
-    flashcards = db.execute("SELECT * FROM flashcards WHERE id = ?", (set_id,)).fetchall()
+    flashcards = db.execute("SELECT * FROM flashcards WHERE set_id = ?", (set_id,)).fetchall()
     flashcards = [dict(flashcard) for flashcard in flashcards]
-    print(flashcards)
+
     session['flashcards'] = flashcards
     session['current_index'] = 0
     return render_template("learn.html", flashcards=flashcards)
 
+# ---------- Test ----------
 @app.route("/test/<set_id>")
 def test(set_id):
-
     db = get_db()
-    flashcards = db.execute("SELECT * FROM flashcards WHERE id = ?", (set_id,)).fetchall()[0]
+    flashcards = db.execute("SELECT * FROM flashcards WHERE set_id = ?", (set_id,)).fetchall()
+    flashcards = [dict(flashcard) for flashcard in flashcards]
 
-    session['flashcards'] = dict(flashcards)
+    session['flashcards'] = flashcards
     session['current_index'] = 0
     return render_template("test.html")
 
@@ -211,9 +209,7 @@ def get_next_card():
     if 'current_index' not in session:
         session['current_index'] = 0
 
-    print('HI')
     cards = session['flashcards']
-    print(cards)
     idx = session['current_index']
 
     if idx >= len(cards):
@@ -232,8 +228,7 @@ def submit_result():
     print(f"Quiz finished! WPM: {wpm}, Avg Similarity: {similarity}")
     return jsonify({'message': 'Results submitted successfully'})
 
-
-# ---------- Auth Routes ----------
+# ---------- Auth ----------
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
