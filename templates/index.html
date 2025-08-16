@@ -1,55 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ignition Template</title>
-    <link rel="stylesheet" href="static/css/styles.css">
-</head>
-<body>
-    <nav>
-        <ul>
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Create</a></li>
-        </ul>
-    </nav>
+{% extends "layout.html" %}
 
-    <div class="toggle-container">
-        <label for="test-toggle">Test Mode:</label>
-        <input type="checkbox" id="test-toggle" name="test-toggle" class="toggle-switch">
-        <span id="test-status">Off</span>
-    </div>
+{% block content %}
 
-    <script>
-        const toggle = document.getElementById('test-toggle');
-        const status = document.getElementById('test-status');
-        toggle.addEventListener('change', function() {
-            status.textContent = this.checked ? 'On' : 'Off';
-        });
+<div class="toggle-container">
+    <label for="test-toggle">Test Mode:</label>
+    <input type="checkbox" id="test-toggle" name="test-toggle" class="toggle-switch">
+    <span id="test-is-toggled">Off</span>
+</div>
 
-        toggle.addEventListener('change', function() {
-            fetch('/toggle', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ status: this.checked })
-            })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Success:', data);
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-        });
-    </script>
+<script src="/static/js/index.js"></script>
 
-    {% for card_set in card_sets %}
-        <div class="card">
-            <h2>{{ card_set.title }}</h2>
-            <p>{{ card_set.description }}</p>
-        </div>
-    {% endfor %}
-</body>
-</html>
+{% for card_set in card_sets %}
+<div class="card">
+    <h2>{{ card_set.title }}</h2>
+    <p>{{ card_set.description }}</p>
+</div>
+{% endfor %}
+{% endblock %}
