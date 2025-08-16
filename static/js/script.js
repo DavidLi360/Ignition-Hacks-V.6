@@ -1,5 +1,6 @@
 let flashcardCount = 0;
 
+// gets summary of a given text
 async function getSummary(text) {
     const response = await fetch("http://127.0.0.1:5000/summarize", {
         method: "POST",
@@ -62,4 +63,21 @@ const text = "Working memory is the short-term system the brain uses to hold and
 
 getSummary(text).then(summary => {
     console.log(summary);
+});
+
+// user selects a docx file
+document.getElementById("fileChooser").addEventListener("change", async function() {
+    const file = this.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const response = await fetch("http://127.0.0.1:5000/summarize-docx", {
+        method: "POST",
+        body: formData
+    });
+
+    const summary = await response.json();
+    console.log(summary); // Array of summarized sentences
 });
