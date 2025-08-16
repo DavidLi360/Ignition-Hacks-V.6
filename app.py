@@ -188,29 +188,37 @@ def submit_result():
     print(f"Quiz finished! WPM: {wpm}, Avg Similarity: {similarity}")
     return jsonify({'message': 'Results submitted successfully'})
 
+
+# ---------- Auth Routes ----------
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
+        username = request.form["username"].strip()
+        password = request.form["password"].strip()
+
+        if not username or not password:
+            flash("Username and password are required.", "error")
+            return redirect(url_for("register"))
+
         hashed_pw = generate_password_hash(password)
 
         db = get_db()
         try:
             db.execute("INSERT INTO users (username, password) VALUES (?, ?)", (username, hashed_pw))
             db.commit()
-            flash("Registration successful! Please log in.", "success")
+            flash("✅ Registration successful! Please log in.", "success")
             return redirect(url_for("login"))
         except sqlite3.IntegrityError:
-            flash("Username already taken.", "error")
+            flash("⚠️ Username already taken. Try another.", "error")
             return redirect(url_for("register"))
     return render_template("register.html")
+
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
+        username = request.form["username"].strip()
+        password = request.form["password"].strip()
 
         db = get_db()
         user = db.execute("SELECT * FROM users WHERE username = ?", (username,)).fetchone()
@@ -218,16 +226,20 @@ def login():
         if user and check_password_hash(user["password"], password):
             session["user_id"] = user["id"]
             session["username"] = user["username"]
+            flash("✅ Logged in successfully!", "success")
             return redirect(url_for("home"))
         else:
-            flash("Invalid username or password.", "error")
+            flash("❌ Invalid username or password.", "error")
+            return redirect(url_for("login"))
     return render_template("login.html")
+
 
 @app.route("/logout")
 def logout():
     session.clear()
-    flash("You have been logged out.", "info")
+    flash("👋 You have been logged out.", "info")
     return redirect(url_for("login"))
+
 
 # -------------------------
 # Run
