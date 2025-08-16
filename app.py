@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session, g, flash, jsonify 
 from module.summarizer import summarize_text, docx_to_sentences
 import sqlite3
-from werkzeug.security import generate_password_hash, check_password_hash, secure_filename
+from werkzeug.security import generate_password_hash, check_password_hash
 import os
 
 app = Flask(__name__)
@@ -133,11 +133,6 @@ def handle_toggle():
     # Send a response back to the client
     return jsonify({'message': 'Status received successfully', 'current_status': status})
 
-
-# Create flashcards page
-@app.route("/create")
-def create():
-    return render_template("create.html")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
