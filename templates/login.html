@@ -1,0 +1,36 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Log In</title>
+        <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
+    </head>
+    <body>
+    <div class="auth-container">
+        <div class="auth-box">
+            <div class="auth-tabs">
+                <a href="{{ url_for('register') }}">Sign up</a>
+                <a href="{{ url_for('login') }}" class="active">Log in</a>
+            </div>
+
+            <div class="social-buttons">
+                <button class="google"><img src="{{ url_for('static', filename='icons/google.svg') }}"> Log In with Google</button>
+                <button class="facebook"><img src="{{ url_for('static', filename='icons/facebook.svg') }}"> Log In with Facebook</button>
+                <button class="apple"><img src="{{ url_for('static', filename='icons/apple.svg') }}"> Log In with Apple</button>
+            </div>
+
+            <div class="divider"><span>or email</span></div>
+
+            <form method="POST">
+                <label>Email</label>
+                <input type="text" name="username" placeholder="Enter your email address or username" required>
+
+                <label>Password <a href="#" class="forgot">Forgot password</a></label>
+                <input type="password" name="password" placeholder="Enter your password" required>
+
+                <button type="submit" class="submit">Log In</button>
+            </form>
+        </div>
+    </div>
+    </body>
+    </html>
