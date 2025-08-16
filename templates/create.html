@@ -6,7 +6,7 @@
     <h1>Create a New Flashcard Set</h1>
 
     <!-- Form sends data to /create -->
-    <form method="POST" action="{{ url_for('create') }}">
+    <form method="POST" action="{{ url_for('create') }}" id="flashcard-form">
         <input type="text" name="title" id="title" placeholder="Title" required>
         <textarea name="description" id="description" placeholder="Add a description..."></textarea>
 
