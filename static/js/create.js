@@ -12,20 +12,32 @@ async function getSummary(text) {
 }
 
 function addFlashcard() {
-    flashcardCount++;
     const flashcardsDiv = document.getElementById('flashcards');
 
     const cardDiv = document.createElement('div');
     cardDiv.className = 'flashcard';
     cardDiv.id = 'flashcard-' + flashcardCount;
 
-    cardDiv.innerHTML = `
-        <input type="text" placeholder="Enter question or term" class="term">
-        <input type="text" placeholder="Enter answer or definition" class="definition">
-        <button class="remove-btn" onclick="removeFlashcard('flashcard-${flashcardCount}')">Remove</button>
-    `;
+    const termInput = document.createElement('input');
+    termInput.type = 'text';
+    termInput.placeholder = 'Enter question or term';
+    termInput.className = 'term';
+
+    const definitionInput = document.createElement('input');
+    definitionInput.type = 'text';
+    definitionInput.placeholder = 'Enter answer or definition';
+    definitionInput.className = 'definition';
+
+    const removeButton = document.createElement('button');
+    removeButton.type = 'button';
+    removeButton.className = 'remove-btn';
+    removeButton.textContent = 'Remove';
+    removeButton.addEventListener('click', () => removeFlashcard(cardDiv.id));
+
+    cardDiv.append(termInput, definitionInput, removeButton);
 
     flashcardsDiv.appendChild(cardDiv);
+    flashcardCount++;
 }
 
 function removeFlashcard(id) {
@@ -81,35 +93,62 @@ addFlashcard();
 // });
 
 // user selects a docx file
-document.getElementById("fileChooser").addEventListener("change", async function() {
-    const file = this.files[0];
-    if (!file) return;
+const fileChooser = document.getElementById("fileChooser");
+if (fileChooser) {
+    fileChooser.addEventListener("change", async function() {
+        const file = this.files[0];
+        if (!file) return;
 
-    const formData = new FormData();
-    formData.append("file", file);
+        const fileName = file.name.toLowerCase();
+        const isCsv = fileName.endsWith('.csv');
 
-    const response = await fetch("http://127.0.0.1:5000/summarize-docx", {
-        method: "POST",
-        body: formData
+        const formData = new FormData();
+        formData.append("file", file);
+
+        const endpoint = isCsv ? "/import-csv" : "/summarize-docx";
+        const response = await fetch(endpoint, {
+            method: "POST",
+            body: formData
+        });
+
+        const payload = await response.json();
+        if (!response.ok) {
+            alert(payload.error || 'Could not import file.');
+            return;
+        }
+
+        const importedCards = isCsv ? payload.cards : payload;
+        console.log(importedCards);
+
+        importedCards.forEach(item => {
+            const flashcardsDiv = document.getElementById('flashcards');
+            const cardDiv = document.createElement('div');
+            cardDiv.className = 'flashcard';
+            cardDiv.id = 'flashcard-' + flashcardCount;
+
+            const termInput = document.createElement('input');
+            termInput.type = 'text';
+            termInput.placeholder = 'Enter term';
+            termInput.className = 'term';
+            termInput.value = isCsv ? (item.term || '') : '';
+
+            const definitionInput = document.createElement('input');
+            definitionInput.type = 'text';
+            definitionInput.placeholder = 'Enter definition';
+            definitionInput.className = 'definition';
+            definitionInput.value = isCsv ? (item.definition || '') : item;
+
+            const removeButton = document.createElement('button');
+            removeButton.type = 'button';
+            removeButton.className = 'remove-btn';
+            removeButton.textContent = 'Remove';
+            removeButton.addEventListener('click', () => removeFlashcard(cardDiv.id));
+
+            cardDiv.append(termInput, definitionInput, removeButton);
+            flashcardsDiv.appendChild(cardDiv);
+            flashcardCount++;
+        });
+
+        fileChooser.value = '';
     });
-
-    const summary = await response.json();
-    console.log(summary); // Array of summarized sentences
-
-    // Autofill summarized sentences
-    summary.forEach(sentence => {
-        const flashcardsDiv = document.getElementById('flashcards');
-        const cardDiv = document.createElement('div');
-        cardDiv.className = 'flashcard';
-        cardDiv.id = 'flashcard-' + flashcardCount;
-
-        cardDiv.innerHTML = `
-            <input type="text" placeholder="Enter term" class="term">
-            <input type="text" placeholder="Enter definition" class="definition" value="${sentence}">
-            <button class="remove-btn" onclick="removeFlashcard('flashcard-${flashcardCount}')">Remove</button>
-        `;
-        
-        flashcardsDiv.appendChild(cardDiv);
-        flashcardCount++;
-    });
-});
+}

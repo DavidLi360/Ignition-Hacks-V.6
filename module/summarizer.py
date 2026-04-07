@@ -1,10 +1,15 @@
+import os
+
+os.environ.setdefault("USE_TF", "0")
+os.environ.setdefault("TRANSFORMERS_NO_TF", "1")
+
 from transformers import pipeline
 import docx
 import nltk
 from nltk.tokenize import sent_tokenize
 
-# Load the summarization pipeline once
-summarizer = pipeline("summarization")  
+# Load the summarization pipeline once using PyTorch to avoid TF/Keras mismatches.
+summarizer = pipeline("summarization", framework="pt")  
 
 def summarize_text(text):
     if not text.strip():

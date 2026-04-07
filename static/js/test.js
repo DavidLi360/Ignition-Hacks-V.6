@@ -5,6 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const nextButton = document.getElementById("next-button");
 
     let currentAnswer = "";
+    let currentCardId = null;
     let quizOver = false;
 
     // tracking stats
@@ -27,6 +28,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (data.quiz_over) {
                     endQuiz();
                 } else {
+                    currentCardId = data.card_id;
                     questionDiv.textContent = data.question;
                     currentAnswer = data.answer;
                     feedbackDiv.textContent = "";
@@ -74,37 +76,38 @@ document.addEventListener("DOMContentLoaded", () => {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({
+                        card_id: currentCardId,
                         wpm: wpm,
-                        similarity: avgSim,
+                        similarity: data.similarity,
                         card: cardCount,
                         is_correct: data.is_correct
                     })
                 })
                 .then(res => res.json())
-                .then(data => {
-                    // Handle response if needed
-                    const timeTilNextReview = data.time_til_next_review;
+                .then(result => {
+                    const prev = document.getElementById("review-info");
+                    if (prev) prev.remove();
+
+                    const timeTilNextReview = result.time_til_next_review;
                     if (typeof timeTilNextReview === "number") {
                         let reviewMsg = "";
                         if (timeTilNextReview < 60) {
                             reviewMsg = `Next review: in ${timeTilNextReview} seconds`;
                         } else if (timeTilNextReview < 3600) {
                             reviewMsg = `Next review: in ${(timeTilNextReview / 60).toFixed(1)} minutes`;
+                        } else if (timeTilNextReview < 86400) {
+                            reviewMsg = `Next review: in ${(timeTilNextReview / 3600).toFixed(1)} hours`;
                         } else {
-                            reviewMsg = `Next review: in ${(timeTilNextReview / 3600).toFixed(2)} hours`;
+                            reviewMsg = `Next review: in ${(timeTilNextReview / 86400).toFixed(1)} days`;
                         }
-                        // Show below feedback
+
                         const reviewDiv = document.createElement("div");
                         reviewDiv.id = "review-info";
                         reviewDiv.style.fontSize = "0.95em";
                         reviewDiv.style.color = "#888";
                         reviewDiv.textContent = reviewMsg;
-                        // Remove previous if exists
-                        const prev = document.getElementById("review-info");
-                        if (prev) prev.remove();
                         feedbackDiv.parentNode.insertBefore(reviewDiv, feedbackDiv.nextSibling);
                     }
-                    console.log("Time until next review:", timeTilNextReview);
                 });
 
                 feedbackDiv.textContent = data.is_correct
