@@ -108,13 +108,16 @@ document.addEventListener("DOMContentLoaded", () => {
                         reviewDiv.textContent = reviewMsg;
                         feedbackDiv.parentNode.insertBefore(reviewDiv, feedbackDiv.nextSibling);
                     }
+
+                    setTimeout(loadNextCard, 900);
+                })
+                .catch(() => {
+                    feedbackDiv.textContent = "Error saving review result.";
                 });
 
                 feedbackDiv.textContent = data.is_correct
                     ? "✅ Correct!"
                     : `❌ Incorrect. Correct answer: ${currentAnswer}`;
-
-                setTimeout(loadNextCard, 900);
             })
             .catch(() => {
                 feedbackDiv.textContent = "Error checking answer.";
