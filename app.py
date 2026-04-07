@@ -375,13 +375,14 @@ def handle_toggle():
 
 @app.route('/toggle-extra', methods=['POST'])
 def handle_extra_toggle():
-    global review_extra_enabled
     if not request.json:
         return jsonify({'error': 'Invalid request'}), 400
     status = request.json.get('status')
-    review_extra_enabled = bool(status)
-    session['review_extra_enabled'] = review_extra_enabled
-    return jsonify({'message': 'Extra review status received successfully', 'current_status': review_extra_enabled})
+    session['review_extra_enabled'] = bool(status)
+    return jsonify({
+        'message': 'Extra review status received successfully',
+        'current_status': session['review_extra_enabled']
+    })
 
 
 @app.route('/import-csv', methods=['POST'])
