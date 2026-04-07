@@ -78,7 +78,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 feedbackEl.textContent = "Correct!";
                 isCorrect = true;
                 let secondsTaken = startTime ? (Date.now() - startTime) / 1000 : 0;
-                let wpm = Math.round((typedCharacters.length / 5) / (secondsTaken / 60));
+                let wpm = secondsTaken > 0
+                    ? Math.round((typedCharacters.length / 5) / (secondsTaken / 60))
+                    : 0;
                 feedbackEl.innerHTML += `<p>Time taken: ${secondsTaken} seconds</p>`;
                 feedbackEl.innerHTML += `<p>WPM: ${wpm}</p>`;
             } else {
