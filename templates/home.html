@@ -1,33 +1,72 @@
 {% extends "layout.html" %}
 
+{% block title %}MemoType | Home{% endblock %}
+
 {% block body %}
-<div class="homepage">
-    <h1>MemoType</h1>
+<div class="page-shell homepage">
+    <section class="panel homepage-hero">
+        <div class="page-kicker">MemoType dashboard</div>
+        <div class="page-hero">
+            <div>
+                <h1 class="page-title">Train recall with a calmer, faster flow.</h1>
+                <p class="page-subtitle">Switch between learn and test, open a set, and keep review timing organized by spaced repetition.</p>
+                <div class="card-meta" style="margin-top: 18px;">
+                    <span class="meta-pill">{{ overall_due }} due</span>
+                    <span class="meta-pill">{{ overall_new }} new</span>
+                    <span class="meta-pill">{{ overall_total }} total</span>
+                </div>
+            </div>
+            <div class="homepage-nav">
+                <a class="link-chip" href="{{ url_for('create') }}">+ Create Flashcards</a>
+                <a class="link-chip button-secondary" href="{{ url_for('logout') }}">Logout</a>
+            </div>
+        </div>
 
-    <nav>
-        <a href="{{ url_for('home') }}">Home</a>
-        <a href="{{ url_for('create') }}">+ Create Flashcards</a>
-        <a href="{{ url_for('logout') }}">Logout</a>
-    </nav>
-    
-    <div class="toggle-container">
-        <label for="test-toggle">Test Mode:</label>
-        <input type="checkbox" id="test-toggle" name="test-toggle" class="toggle-switch">
-        <span id="test-status">Off</span>
-    </div>
+        <div class="toggle-container">
+            <label for="test-toggle">Test mode</label>
+            <input type="checkbox" id="test-toggle" name="test-toggle" class="toggle-switch">
+            <span id="test-status">Off</span>
+        </div>
 
-    <h2>Your Flashcard Sets</h2>
-    <ul class="set-list">
-        {% for s in sets %}
-        <li class="set-card">
-            <button id="{{ s.id }}">
-            <strong>{{ s.title }}</strong> — {{ s.description }}
-            </button>
-        </li>
-        {% else %}
-        <li class="set-card">No flashcard sets yet. Create one!</li>
-        {% endfor %}
-    </ul>
+        <div class="toggle-container">
+            <label for="review-extra-toggle">Review extra</label>
+            <input type="checkbox" id="review-extra-toggle" name="review-extra-toggle" class="toggle-switch" {% if review_extra_enabled %}checked{% endif %}>
+            <span id="review-extra-status">{% if review_extra_enabled %}On{% else %}Off{% endif %}</span>
+        </div>
+    </section>
+
+    <section class="stack">
+        <div class="row" style="justify-content: space-between;">
+            <div>
+                <div class="page-kicker">Your sets</div>
+                <h2 class="page-title" style="font-size: clamp(1.7rem, 2.8vw, 2.6rem); margin-top: 10px;">Open a deck</h2>
+            </div>
+        </div>
+
+        <ul class="set-list">
+            {% for s in sets %}
+            <li class="set-card">
+                <button type="button" data-set-button id="{{ s.id }}">
+                    <strong>{{ s.title }}</strong>
+                    <p>{{ s.description or 'No description yet.' }}</p>
+                    <div class="card-meta">
+                        <span class="meta-pill">Tap to open</span>
+                        <span class="meta-pill">Learn or test</span>
+                        {% set stats = set_counts.get(s.id, {}) %}
+                        <span class="meta-pill">{{ stats.get('due_count', 0) }} due</span>
+                        <span class="meta-pill">{{ stats.get('new_count', 0) }} new</span>
+                    </div>
+                </button>
+            </li>
+            {% else %}
+            <li class="set-card">
+                <button type="button" class="button-secondary" disabled style="width:100%; cursor:default;">
+                    No flashcard sets yet. Create one to get started.
+                </button>
+            </li>
+            {% endfor %}
+        </ul>
+    </section>
 </div>
-<script src="/static/js/home.js"></script>
+<script src="{{ url_for('static', filename='js/home.js') }}"></script>
 {% endblock %}

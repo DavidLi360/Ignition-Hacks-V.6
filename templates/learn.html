@@ -1,9 +1,13 @@
 {% extends "layout.html" %}
 
+{% block title %}MemoType | Learn{% endblock %}
+
 {% block body %}
-    <div id="flashcard-container">
-        <a href="/" id="home-button">🏠 Home</a>
-        <h1>Flashcard Learn</h1>
+    <div id="flashcard-container" class="panel">
+        <a href="/" id="home-button" class="link-chip button-secondary">← Home</a>
+        <div class="page-kicker">Learn mode</div>
+        <h1>Preview the answer, then type it from memory.</h1>
+        <p class="page-subtitle">This mode is for fast repetition. The answer is revealed briefly before you type, so you can practice recall and reinforce the pattern.</p>
         <div id="question"></div>
         <div id="input-container">
             <span id="typed-text"></span><span id="remaining-text"></span>
@@ -12,6 +16,6 @@
         <div id="feedback"></div>
         <button id="next-button">Next Card</button>
 
-        <script src="/static/js/learn.js"></script>
+        <script src="{{ url_for('static', filename='js/learn.js') }}"></script>
     </div>
 {% endblock %}

@@ -2,54 +2,51 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/auth.css') }}">
-    <style>
-        .flash-container {
-            margin: 8px 0 12px 0; /* top + bottom spacing */
-        }
-        .flash {
-            padding: 8px;
-            border-radius: 4px;
-            margin-bottom: 6px; /* extra spacing if multiple messages */
-        }
-        .flash.error { background: #f8d7da; color: #721c24; }
-        .flash.success { background: #d4edda; color: #155724; }
-        .flash.info { background: #d1ecf1; color: #0c5460; }
-        .flash.warning { background: #fff3cd; color: #856404; }
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
 </head>
-<body>
+<body class="auth-page">
 <div class="auth-container">
-    <div class="auth-box">
+    <section class="auth-hero">
+        <div>
+            <div class="page-kicker">MemoType</div>
+            <h1>Build a study system you’ll actually use.</h1>
+            <p>Create an account, make decks, and keep your review loop moving with a focused interface built for repetition.</p>
+            <div class="auth-highlights">
+                <div class="highlight-row"><span class="highlight-dot"></span><span>Organize custom sets by subject or exam.</span></div>
+                <div class="highlight-row"><span class="highlight-dot"></span><span>Practice learn mode before switching to test mode.</span></div>
+                <div class="highlight-row"><span class="highlight-dot"></span><span>Track recall timing with spaced repetition.</span></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="auth-box">
         <div class="auth-tabs">
             <a href="{{ url_for('register') }}" class="active">Sign up</a>
             <a href="{{ url_for('login') }}">Log in</a>
         </div>
 
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-stack" style="position: static; margin: 0 0 14px;">
+                    {% for category, message in messages %}
+                        <div class="flash flash-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
         <form method="POST">
-            <label>Email</label>
+            <label>Email or username</label>
             <input type="text" name="username" placeholder="Enter your email address or username" required>
 
             <label>Password</label>
-            <input type="password" name="password" placeholder="Enter your password" required>
-
-            <!-- Flash messages -->
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    <div class="flash-container">
-                        {% for category, message in messages %}
-                            <div class="flash {{ category }}">
-                                {{ message }}
-                            </div>
-                        {% endfor %}
-                    </div>
-                {% endif %}
-            {% endwith %}
+            <input type="password" name="password" placeholder="Create a password" required>
 
             <button type="submit" class="submit">Sign Up</button>
         </form>
-    </div>
+    </section>
 </div>
 </body>
 </html>
