@@ -197,25 +197,20 @@ def _parse_csv_flashcards(file_storage):
     else:
         normalized_headers = {}
 
+    def _resolve_header(*aliases):
+        for alias in aliases:
+            header = normalized_headers.get(alias)
+            if header:
+                return header
+        return None
+
+    question_field = _resolve_header("question", "front", "term", "prompt", "cue")
+    answer_field = _resolve_header("answer", "back", "definition", "response", "meaning")
+
     cards = []
     for row in reader:
-        lowered_row = {str(key).strip().lower(): (value or "").strip() for key, value in row.items() if key is not None}
-
-        question = (
-            lowered_row.get("question")
-            or lowered_row.get("front")
-            or lowered_row.get("term")
-            or lowered_row.get("prompt")
-            or lowered_row.get("cue")
-        )
-        answer = (
-            lowered_row.get("answer")
-            or lowered_row.get("back")
-            or lowered_row.get("definition")
-            or lowered_row.get("response")
-            or lowered_row.get("meaning")
-        )
-
+        question = (row.get(question_field) or "").strip() if question_field else ""
+        answer = (row.get(answer_field) or "").strip() if answer_field else ""
         if not question and reader.fieldnames:
             first_field = reader.fieldnames[0]
             second_field = reader.fieldnames[1] if len(reader.fieldnames) > 1 else None
